@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { incrementCounter, decrementCounter } from "./testActions";
+import { incrementAsync, decrementAsync } from "./testActions";
 import { Button } from "semantic-ui-react";
 import Script from "react-load-script";
 import PlacesAutocomplete, {
@@ -42,7 +42,7 @@ export class TestComponent extends Component {
       onChange: this.onChange
     };
 
-    const { data, incrementCounter, decrementCounter, openModal } = this.props;
+    const { data, incrementAsync, decrementAsync, openModal, loading } = this.props;
 
     return (
       <div>
@@ -53,8 +53,8 @@ export class TestComponent extends Component {
 
         <h1>Test Area</h1>
         <p>Data: {data}</p>
-        <Button onClick={incrementCounter} color="green" content="Increment" />
-        <Button onClick={decrementCounter} color="red" content="Decrement" />
+        <Button loading={loading} onClick={incrementAsync} color="green" content="Increment" />
+        <Button loading={loading} onClick={decrementAsync} color="red" content="Decrement" />
         <Button onClick={() => openModal('TestModal', { data: 43 })} color="teal" content="Open Modal" />
 
         <br />
@@ -72,12 +72,13 @@ export class TestComponent extends Component {
 }
 
 const mapStateToProps = state => ({
-  data: state.test.data
+  data: state.test.data,
+  loading: state.test.loading
 });
 
 const mapDispatchToProps = {
-  incrementCounter,
-  decrementCounter,
+  incrementAsync,
+  decrementAsync,
   openModal
 };
 
