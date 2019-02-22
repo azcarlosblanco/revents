@@ -4,7 +4,9 @@ import { CREATE_EVENT, UPDATE_EVENT, DELETE_EVENT, FETCH_EVENTS } from "./eventC
  const initialState = [];
 
 export const createEvent = (state, payload) => {
-    return [...initialState, {...payload.event}];
+
+  debugger;
+    return [...state, {...payload.event}];
 }
 
 export const updateEvent = (state, payload) => {
@@ -25,4 +27,3 @@ export default createReducer(initialState, {
     [DELETE_EVENT]: deleteEvent,
     [FETCH_EVENTS]: fetchEvents
   });
-FETCH_EVENTS
