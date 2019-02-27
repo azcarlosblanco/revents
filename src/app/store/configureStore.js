@@ -1,31 +1,42 @@
-import { createStore, applyMiddleware } from 'redux'
-import rootReducer from '../reducers/rootReducer';
-import { composeWithDevTools } from 'redux-devtools-extension'
-import thunk from 'redux-thunk';
+import { createStore, applyMiddleware } from "redux";
+import rootReducer from "../reducers/rootReducer";
+import { composeWithDevTools } from "redux-devtools-extension";
+import thunk from "redux-thunk";
+import { reactReduxFirebase, getFirebase } from "react-redux-firebase";
+import { reduxFirestore, getFirestore } from "redux-firestore";
+import firebase from "../config/firebase";
 
-export const configureStore = (preloadedState) => {
-    const middewares = [thunk];
-    const middlewareEnhancer = applyMiddleware(...middewares);
-    const storeEnhancers = [middlewareEnhancer];
-    
-    const composedEnhanced = composeWithDevTools(...storeEnhancers);
+const rrfConfig = {
+  userProfile: "users",
+  attachAuthIsReady: true,
+  useFirestoreForProfile: true,
+  updateProfileOnLogin: false
+};
 
-    const store = createStore(
-        rootReducer,
-        preloadedState,
-        composedEnhanced,
-    );
+export const configureStore = preloadedState => {
+  const middewares = [thunk.withExtraArgument({ getFirebase, getFirestore })];
+  const middlewareEnhancer = applyMiddleware(...middewares);
 
-    if(process.env.NODE_ENV !== 'production') {
-        if(module.hot) {
-            module.hot.accept('../reducers/rootReducer', () => {
-                console.log("object")
+  const storeEnhancers = [middlewareEnhancer];
 
-                const newRootReducer = require('../reducers/rootReducer').default;
-                store.replaceReducer(newRootReducer);
-            });
-        }
+  const composedEnhanced = composeWithDevTools(
+    ...storeEnhancers,
+    reactReduxFirebase(firebase, rrfConfig),
+    reduxFirestore(firebase)
+  );
+
+  const store = createStore(rootReducer, preloadedState, composedEnhanced);
+
+  if (process.env.NODE_ENV !== "production") {
+    if (module.hot) {
+      module.hot.accept("../reducers/rootReducer", () => {
+        console.log("object");
+
+        const newRootReducer = require("../reducers/rootReducer").default;
+        store.replaceReducer(newRootReducer);
+      });
     }
+  }
 
-    return store;
-}
+  return store;
+};
