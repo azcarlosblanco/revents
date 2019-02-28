@@ -6,7 +6,6 @@ import { updateEvent, createEvent } from "../eventActions";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import EventActivity from "../EventActivity/EventActivity";
 import { firestoreConnect } from "react-redux-firebase";
-import { type } from "os";
 
 export class EventDashboard extends Component {
   handleDeleteEvent = eventId => () => {

@@ -27,7 +27,7 @@ const LoginForm = ({ login, handleSubmit, error, socialLoging }) => {
             {error}
           </Label>
         )}
-        <Button fluid size="large" color="teal" fluid>
+        <Button fluid size="large" color="teal">
           Login
         </Button>
         <Divider horizontal>Or</Divider>
